@@ -31,7 +31,7 @@ body{
   position:relative;
   height:45vh;
   background:#eef3ff;
-  border-radius:12px 12px 0 0;
+  border-radius:14px 14px 0 0;
   overflow:hidden;
   touch-action:none;
 }
@@ -48,9 +48,6 @@ body{
 }
 .key.dragging{
   z-index:10;
-}
-.locked{
-  pointer-events:none;
 }
 </style>
 </head>
@@ -84,7 +81,7 @@ const ROMAJI = {
   ga:"が",gi:"ぎ",gu:"ぐ",ge:"げ",go:"ご"
 };
 
-/* ===== 初期キー配置 ===== */
+/* ===== 初期キー配置（不要キー除外済み） ===== */
 const KEYS = [
  ["w","e","r","t","y","u","i","o","p"],
  ["a","s","d","g","h","k"],
@@ -94,8 +91,6 @@ const KEYS = [
 
 const canvas = document.getElementById("canvas");
 const textArea = document.getElementById("textArea");
-const keysData = {};
-let keyId = 0;
 
 /* ===== キー作成 ===== */
 function createKey(label,x,y,w=50,h=50){
@@ -108,15 +103,13 @@ function createKey(label,x,y,w=50,h=50){
   el.style.height=h+"px";
   canvas.appendChild(el);
 
-  keysData[++keyId]={el,label,x,y,w,h};
-
   if(isEditMode){
-    enableDrag(el, keysData[keyId]);
-  }else{
-    el.classList.add("locked");
+    enableDrag(el);
   }
 
-  el.onclick=()=>handleInput(label);
+  el.addEventListener("click",()=>{
+    handleInput(label);
+  });
 }
 
 /* ===== 入力処理 ===== */
@@ -131,36 +124,38 @@ function handleInput(key){
     romajiBuffer="";
     return;
   }
+
   romajiBuffer+=key;
+
   for(let l=3;l>=1;l--){
     const part=romajiBuffer.slice(-l);
     if(ROMAJI[part]){
-      textArea.value=textArea.value.slice(0,-(romajiBuffer.length-l))+ROMAJI[part];
+      textArea.value+=ROMAJI[part];
       romajiBuffer="";
       break;
     }
   }
 }
 
-/* ===== ドラッグ ===== */
-function enableDrag(el,data){
-  let sx,sy;
-  el.onpointerdown=e=>{
+/* ===== ドラッグ（編集モードのみ） ===== */
+function enableDrag(el){
+  let offsetX, offsetY;
+  el.addEventListener("pointerdown",e=>{
     el.classList.add("dragging");
-    sx=e.clientX-data.x;
-    sy=e.clientY-data.y;
+    offsetX = e.clientX - el.offsetLeft;
+    offsetY = e.clientY - el.offsetTop;
     el.setPointerCapture(e.pointerId);
-    el.onpointermove=ev=>{
-      data.x=ev.clientX-sx;
-      data.y=ev.clientY-sy;
-      el.style.left=data.x+"px";
-      el.style.top=data.y+"px";
+
+    el.onpointermove = ev=>{
+      el.style.left = (ev.clientX-offsetX)+"px";
+      el.style.top  = (ev.clientY-offsetY)+"px";
     };
-    el.onpointerup=()=>{
+
+    el.onpointerup = ()=>{
       el.classList.remove("dragging");
       el.onpointermove=null;
     };
-  };
+  });
 }
 
 /* ===== 初期配置 ===== */
