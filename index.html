@@ -2,198 +2,178 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>自由配置キーボード実験</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>研究用スマホキーボード</title>
 
 <style>
-body {
-  font-family: sans-serif;
-  background: #f6f7fb;
-  margin: 0;
-  padding: 10px;
+body{
+  max-width:430px;
+  margin:0 auto;
+  font-family:system-ui, sans-serif;
+  background:#f6f7fb;
 }
-
-textarea {
-  width: 100%;
-  height: 100px;
-  font-size: 18px;
-  margin-bottom: 10px;
+#textArea{
+  width:100%;
+  height:120px;
+  font-size:18px;
+  padding:10px;
+  box-sizing:border-box;
 }
-
-#canvas {
-  position: relative;
-  width: 100%;
-  height: 60vh;
-  background: #eef2ff;
-  border-radius: 10px;
+#canvasWrap{
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:100%;
+  max-width:430px;
 }
-
-.key {
-  position: absolute;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  user-select: none;
-  font-size: 16px;
+#canvas{
+  position:relative;
+  height:45vh;
+  background:#eef3ff;
+  border-radius:12px 12px 0 0;
+  overflow:hidden;
+  touch-action:none;
+}
+.key{
+  position:absolute;
+  background:white;
+  border:1px solid #ccc;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  user-select:none;
+}
+.key.dragging{
+  z-index:10;
+}
+.locked{
+  pointer-events:none;
 }
 </style>
 </head>
 
 <body>
 
-<h2>自由配置キーボード</h2>
+<textarea id="textArea" placeholder="ここに日本語が入力されます"></textarea>
 
-<textarea id="textArea" placeholder="ここに入力が表示されます"></textarea>
-
-<div id="canvas"></div>
-
-<div style="margin-top:10px;">
-  <select id="keySelect"></select>
-  <input type="number" id="keyW" value="56">
-  <input type="number" id="keyH" value="56">
-  <button id="applySize">サイズ変更</button>
+<div id="canvasWrap">
+  <div id="canvas"></div>
 </div>
 
 <script>
-const canvas = document.getElementById("canvas");
-const textArea = document.getElementById("textArea");
-const keySelect = document.getElementById("keySelect");
-const keyWInput = document.getElementById("keyW");
-const keyHInput = document.getElementById("keyH");
-const applyBtn = document.getElementById("applySize");
+/* ===== モード判定 ===== */
+const params = new URLSearchParams(location.search);
+const isEditMode = params.get("edit") === "1";
 
-const TAP_THRESHOLD = 6;
+/* ===== ローマ字変換 ===== */
+let romajiBuffer = "";
+const ROMAJI = {
+  a:"あ",i:"い",u:"う",e:"え",o:"お",
+  ka:"か",ki:"き",ku:"く",ke:"け",ko:"こ",
+  sa:"さ",shi:"し",su:"す",se:"せ",so:"そ",
+  ta:"た",chi:"ち",tsu:"つ",te:"て",to:"と",
+  na:"な",ni:"に",nu:"ぬ",ne:"ね",no:"の",
+  ha:"は",hi:"ひ",fu:"ふ",he:"へ",ho:"ほ",
+  ma:"ま",mi:"み",mu:"む",me:"め",mo:"も",
+  ya:"や",yu:"ゆ",yo:"よ",
+  ra:"ら",ri:"り",ru:"る",re:"れ",ro:"ろ",
+  wa:"わ",n:"ん",
+  ga:"が",gi:"ぎ",gu:"ぐ",ge:"げ",go:"ご"
+};
 
+/* ===== 初期キー配置 ===== */
 const KEYS = [
-  "w","e","r","t","y","u","i","o","p",
-  "a","s","d","g","h","k",
-  "z","b","n","m",
-  "space","back"
+ ["w","e","r","t","y","u","i","o","p"],
+ ["a","s","d","g","h","k"],
+ ["z","b","n","m"],
+ ["space","back"]
 ];
 
-const keyData = {};
+const canvas = document.getElementById("canvas");
+const textArea = document.getElementById("textArea");
+const keysData = {};
+let keyId = 0;
 
-KEYS.forEach((key, i) => {
+/* ===== キー作成 ===== */
+function createKey(label,x,y,w=50,h=50){
   const el = document.createElement("div");
   el.className = "key";
-  el.textContent = key === "space" ? "␣" : key === "back" ? "⌫" : key;
-
-  const left = 10 + (i % 7) * 60;
-  const top = 10 + Math.floor(i / 7) * 70;
-
-  el.style.left = left + "px";
-  el.style.top = top + "px";
-  el.style.width = "56px";
-  el.style.height = "56px";
-
+  el.textContent = label==="space"?"␣":label==="back"?"⌫":label;
+  el.style.left=x+"px";
+  el.style.top=y+"px";
+  el.style.width=w+"px";
+  el.style.height=h+"px";
   canvas.appendChild(el);
 
-  keyData[key] = {
-    el, left, top,
-    w: 56, h: 56,
-    origLeft: left,
-    origTop: top
-  };
+  keysData[++keyId]={el,label,x,y,w,h};
 
-  enableDrag(el, key);
-  addSelectOption(key);
-});
+  if(isEditMode){
+    enableDrag(el, keysData[keyId]);
+  }else{
+    el.classList.add("locked");
+  }
 
-applyBtn.addEventListener("click", () => {
-  const key = keySelect.value;
-  if (!key) return;
+  el.onclick=()=>handleInput(label);
+}
 
-  const d = keyData[key];
-  d.w = Number(keyWInput.value);
-  d.h = Number(keyHInput.value);
+/* ===== 入力処理 ===== */
+function handleInput(key){
+  if(key==="back"){
+    textArea.value=textArea.value.slice(0,-1);
+    romajiBuffer="";
+    return;
+  }
+  if(key==="space"){
+    textArea.value+=" ";
+    romajiBuffer="";
+    return;
+  }
+  romajiBuffer+=key;
+  for(let l=3;l>=1;l--){
+    const part=romajiBuffer.slice(-l);
+    if(ROMAJI[part]){
+      textArea.value=textArea.value.slice(0,-(romajiBuffer.length-l))+ROMAJI[part];
+      romajiBuffer="";
+      break;
+    }
+  }
+}
 
-  d.el.style.width = d.w + "px";
-  d.el.style.height = d.h + "px";
-
-  d.origLeft = d.left;
-  d.origTop = d.top;
-});
-
-function enableDrag(el, key) {
-  let startX, startY, startLeft, startTop;
-  let moved = false;
-
-  el.addEventListener("pointerdown", e => {
-    e.preventDefault();
-    moved = false;
-    startX = e.clientX;
-    startY = e.clientY;
-    const d = keyData[key];
-    startLeft = d.left;
-    startTop = d.top;
+/* ===== ドラッグ ===== */
+function enableDrag(el,data){
+  let sx,sy;
+  el.onpointerdown=e=>{
+    el.classList.add("dragging");
+    sx=e.clientX-data.x;
+    sy=e.clientY-data.y;
     el.setPointerCapture(e.pointerId);
-  });
-
-  el.addEventListener("pointermove", e => {
-    const dx = e.clientX - startX;
-    const dy = e.clientY - startY;
-
-    if (Math.abs(dx) > TAP_THRESHOLD || Math.abs(dy) > TAP_THRESHOLD) {
-      moved = true;
-      const d = keyData[key];
-      d.left = startLeft + dx;
-      d.top = startTop + dy;
-      el.style.left = d.left + "px";
-      el.style.top = d.top + "px";
-    }
-  });
-
-  el.addEventListener("pointerup", e => {
-    el.releasePointerCapture(e.pointerId);
-    const d = keyData[key];
-
-    if (!moved) {
-      if (key === "back") {
-        textArea.value = textArea.value.slice(0, -1);
-      } else if (key === "space") {
-        textArea.value += " ";
-      } else {
-        textArea.value += key;
-      }
-      return;
-    }
-
-    let overlap = false;
-    for (const k in keyData) {
-      if (k === key) continue;
-      const o = keyData[k];
-      if (
-        d.left < o.left + o.w &&
-        d.left + d.w > o.left &&
-        d.top < o.top + o.h &&
-        d.top + d.h > o.top
-      ) {
-        overlap = true;
-        break;
-      }
-    }
-
-    if (overlap) {
-      d.left = d.origLeft;
-      d.top = d.origTop;
-      el.style.left = d.left + "px";
-      el.style.top = d.top + "px";
-    } else {
-      d.origLeft = d.left;
-      d.origTop = d.top;
-    }
-  });
+    el.onpointermove=ev=>{
+      data.x=ev.clientX-sx;
+      data.y=ev.clientY-sy;
+      el.style.left=data.x+"px";
+      el.style.top=data.y+"px";
+    };
+    el.onpointerup=()=>{
+      el.classList.remove("dragging");
+      el.onpointermove=null;
+    };
+  };
 }
 
-function addSelectOption(key) {
-  const opt = document.createElement("option");
-  opt.value = key;
-  opt.textContent = key;
-  keySelect.appendChild(opt);
-}
+/* ===== 初期配置 ===== */
+let y=10;
+KEYS.forEach(row=>{
+  let x=10;
+  row.forEach(k=>{
+    const w = k==="space"?200:50;
+    createKey(k,x,y,w,50);
+    x+=w+6;
+  });
+  y+=56;
+});
 </script>
 
 </body>
