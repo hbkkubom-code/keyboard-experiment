@@ -21,35 +21,33 @@ let selectedKey = null;
 
 /* ===== キー配置（backspace追加） ===== */
 const keys = [
-  { label:"a", x:55, y:20, w:52, h:52 },
-  { label:"i", x:115, y:20, w:52, h:52 },
-  { label:"u", x:175, y:20, w:52, h:52 },
-  { label:"e", x:235, y:20, w:52, h:52 },
-  { label:"o", x:295, y:20, w:52, h:52 },
-  { label:"k", x:355, y:20, w:52, h:52 },
-  { label:"s", x:415, y:20, w:52, h:52 },
+  { label:"a", x:30, y:20, w:52, h:52 },
+  { label:"i", x:100, y:20, w:52, h:52 },
+  { label:"u", x:30, y:90, w:52, h:52 },
+  { label:"e", x:100, y:90, w:52, h:52 },
+  { label:"o", x:30, y:160, w:52, h:52 },
 
-  { label:"t", x:25, y:90, w:52, h:52 },
-  { label:"n", x:85, y:90, w:52, h:52 },
-  { label:"h", x:145, y:90, w:52, h:52 },
-  { label:"m", x:205, y:90, w:52, h:52 },
-  { label:"y", x:265, y:90, w:52, h:52 },
-  { label:"r", x:325, y:90, w:52, h:52 },
-  { label:"w", x:385, y:90, w:52, h:52 },
-  { label:"g", x:445, y:90, w:52, h:52 },
+  { label:"k", x:465, y:20, w:52, h:52 },
+  { label:"s", x:325, y:20, w:52, h:52 },
+  { label:"t", x:395, y:20, w:52, h:52 },
+  { label:"n", x:325, y:160, w:52, h:52 },
+  { label:"h", x:395, y:90, w:52, h:52 },
+  { label:"m", x:185, y:160, w:52, h:52 },
+  { label:"y", x:325, y:90, w:52, h:52 },
+  { label:"r", x:465, y:90, w:52, h:52 },
+  { label:"w", x:255, y:90, w:52, h:52 },
+  { label:"g", x:255, y:20, w:52, h:52 },
+  { label:"z", x:185, y:90, w:52, h:52 },
+  { label:"d", x:395, y:160, w:52, h:52 },
+  { label:"b", x:255, y:160, w:52, h:52 },
+  { label:"p", x:185, y:20, w:52, h:52 },
+  { label:"x", x:100, y:160, w:52, h:52 },
 
-  { label:"z", x:25, y:160, w:52, h:52 },
-  { label:"d", x:85, y:160, w:52, h:52 },
-  { label:"b", x:145, y:160, w:52, h:52 },
-  { label:"p", x:385, y:160, w:52, h:52 },
-  { label:"x", x:445, y:160, w:52, h:52 },
-
-  { label:"-、。!?", x:505, y:160, w:52, h:52 },
-  { label:"back", x:475, y:20, w:70, h:52 },
-  { label:"space", x:205, y:160, w:170, h:52 },
-  { label: "enter", x: 505, y: 90, w: 60, h: 50}
+  { label:"-、。!?", x:465, y:160, w:52, h:52 },
+  { label:"back", x:535, y:20, w:70, h:52 },
+  { label:"space", x:535, y:90, w:70, h:52 },
+  { label: "enter", x: 535, y: 160, w: 70, h: 52}
 ];
-
 const BASE_WIDTH = 600;
 
 const keyboard = document.getElementById("keyboard");
@@ -438,3 +436,4 @@ function applyModeUI(){
 /* 初期描画 */
 applyModeUI();
 render();
+
