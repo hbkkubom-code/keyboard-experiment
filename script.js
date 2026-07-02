@@ -30,7 +30,7 @@ const keys = [
   { label:"k", x:230, y:20, w:52, h:52 },
   { label:"s", x:230, y:160, w:52, h:52 },
   { label:"t", x:230, y:90, w:52, h:52 },
-  { label:"n", x:230, y:90, w:52, h:52 },
+  { label:"n", x:170, y:90, w:52, h:52 },
   { label:"h", x:290, y:90, w:52, h:52 },
   { label:"m", x:170, y:20, w:52, h:52 },
   { label:"y", x:350, y:90, w:52, h:52 },
@@ -43,12 +43,12 @@ const keys = [
   { label:"p", x:410, y:160, w:52, h:52 },
   { label:"x", x:90, y:160, w:52, h:52 },
 
-  { label:"-、。!?", x:470, y:160, w:72, h:52 },
+  { label:"-、。!?", x:470, y:160, w:70, h:52 },
   { label:"back", x:410, y:20, w:52, h:52 },
   { label:"space", x:470, y:20, w:70, h:52 },
   { label: "enter", x: 470, y: 90, w: 70, h: 52}
 ];
-const BASE_WIDTH = 600;
+const BASE_WIDTH = 560;
 
 const keyboard = document.getElementById("keyboard");
 const textArea = document.getElementById("textArea");
