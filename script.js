@@ -43,10 +43,10 @@ const keys = [
   { label:"p", x:410, y:140, w:52, h:52 },
   { label:"x", x:30, y:140, w:52, h:52 },
 
-  { label:"-、。!?", x:470, y:160, w:70, h:52 },
+  { label:"-、。!?", x:470, y:140, w:70, h:52 },
   { label:"back", x:410, y:20, w:52, h:52 },
   { label:"space", x:470, y:20, w:70, h:52 },
-  { label: "enter", x: 470, y: 90, w: 70, h: 52}
+  { label: "enter", x: 470, y: 80, w: 70, h: 52}
 ];
 const BASE_WIDTH = 560;
 
