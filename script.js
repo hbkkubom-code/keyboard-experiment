@@ -21,34 +21,35 @@ let selectedKey = null;
 
 /* ===== キー配置（backspace追加） ===== */
 const keys = [
-  { label:"a", x:90, y:80, w:52, h:52 },
-  { label:"i", x:30, y:80, w:52, h:52 },
-  { label:"u", x:90, y:140, w:52, h:52 },
-  { label:"e", x:30, y:20, w:52, h:52 },
-  { label:"o", x:90, y:20, w:52, h:52 },
+  { label:"a", x:10, y:10, w:70, h:70 },
+  { label:"i", x:90, y:10, w:70, h:70 },
+  { label:"u", x:10, y:90, w:70, h:70 },
+  { label:"e", x:90, y:90, w:70, h:70 },
+  { label:"o", x:10, y:170, w:70, h:70 },
 
-  { label:"k", x:290, y:20, w:52, h:52 },
-  { label:"s", x:290, y:140, w:52, h:52 },
-  { label:"t", x:230, y:80, w:52, h:52 },
-  { label:"n", x:290, y:80, w:52, h:52 },
-  { label:"h", x:230, y:20, w:52, h:52 },
-  { label:"m", x:230, y:140, w:52, h:52 },
-  { label:"y", x:350, y:140, w:52, h:52 },
-  { label:"r", x:350, y:80, w:52, h:52 },
-  { label:"w", x:170, y:80, w:52, h:52 },
-  { label:"g", x:410, y:80, w:52, h:52 },
-  { label:"z", x:170, y:20, w:52, h:52 },
-  { label:"d", x:350, y:20, w:52, h:52 },
-  { label:"b", x:170, y:140, w:52, h:52 },
-  { label:"p", x:410, y:140, w:52, h:52 },
-  { label:"x", x:30, y:140, w:52, h:52 },
+  { label:"k", x:500, y:10, w:70, h:70 },
+  { label:"s", x:340, y:10, w:70, h:70 },
+  { label:"t", x:420, y:10, w:70, h:70 },
+  { label:"n", x:340, y:170, w:70, h:70 },
+  { label:"h", x:420, y:90, w:70, h:70 },
+  { label:"m", x:180, y:170, w:70, h:70 },
+  { label:"y", x:340, y:90, w:70, h:70 },
+  { label:"r", x:500, y:90, w:70, h:70 },
+  { label:"w", x:260, y:90, w:70, h:70 },
+  { label:"g", x:260, y:10, w:70, h:70 },
+  { label:"z", x:180, y:90, w:70, h:70 },
+  { label:"d", x:420, y:170, w:70, h:70 },
+  { label:"b", x:260, y:170, w:70, h:70 },
+  { label:"p", x:180, y:10, w:70, h:70 },
+  { label:"x", x:90, y:170, w:70, h:70 },
 
-  { label:"-、。!?", x:470, y:140, w:70, h:52 },
-  { label:"back", x:410, y:20, w:52, h:52 },
-  { label:"space", x:470, y:20, w:70, h:52 },
-  { label: "enter", x: 470, y: 80, w: 70, h: 52}
+  { label:"-、。!?", x:500, y:170, w:70, h:70 },
+  { label:"back", x:580, y:10, w:70, h:70 },
+  { label:"space", x:580, y:90, w:70, h:70 },
+  { label: "enter", x: 580, y: 170, w: 70, h: 70}
 ];
-const BASE_WIDTH = 560;
+
+const BASE_WIDTH = 600;
 
 const keyboard = document.getElementById("keyboard");
 const textArea = document.getElementById("textArea");
@@ -66,17 +67,6 @@ exportLayoutBtn.onclick = () => {
 
   // textareaに表示
   textArea.value = csv;
-};
-
-const startMeasureBtn = document.getElementById("startMeasureBtn");
-const stopMeasureBtn = document.getElementById("stopMeasureBtn");
-
-startMeasureBtn.onclick = () => {
-  alert("測定開始");
-};
-
-stopMeasureBtn.onclick = () => {
-  alert("測定終了");
 };
 
 /* ===== ローマ字→かな ===== */
@@ -433,7 +423,119 @@ function applyModeUI(){
 
 }
 
+/* ===== 配置データ読み込み ===== */
+
+const layoutInput = document.getElementById("layoutInput");
+const importLayoutBtn = document.getElementById("importLayoutBtn");
+
+importLayoutBtn.onclick = () => {
+
+  const csv = layoutInput.value.trim();
+
+  if (!csv) {
+    alert("配置データを入力してください");
+    return;
+  }
+
+  const lines = csv.split(/\r?\n/);
+
+  // ヘッダーを確認
+  if (lines[0].trim() !== "label,x,y,w,h") {
+    alert("CSVの形式が正しくありません");
+    return;
+  }
+
+  const newLayout = new Map();
+
+  // 2行目以降を読み込む
+  for (let i = 1; i < lines.length; i++) {
+
+    if (!lines[i].trim()) continue;
+
+    const values = lines[i].split(",");
+
+    if (values.length !== 5) {
+      alert(`${i + 1}行目の形式が正しくありません`);
+      return;
+    }
+
+    const [label, x, y, w, h] = values;
+
+    const key = keys.find(k => k.label === label);
+
+    if (!key || newLayout.has(label)) {
+      alert(`${i + 1}行目のキー名が不正です`);
+      return;
+    }
+
+    const position = {
+      x: Number(x),
+      y: Number(y),
+      w: Number(w),
+      h: Number(h)
+    };
+
+    if (
+      !Object.values(position).every(Number.isFinite) ||
+      position.w <= 0 ||
+      position.h <= 0
+    ) {
+      alert(`${i + 1}行目の座標やサイズが不正です`);
+      return;
+    }
+
+    newLayout.set(label, position);
+  }
+
+  // すべてのキーが含まれているか確認
+  if (newLayout.size !== keys.length) {
+    alert("すべてのキーの配置データが必要です");
+    return;
+  }
+
+  // 配置を反映
+  keys.forEach(k => {
+    const position = newLayout.get(k.label);
+
+    k.x = position.x;
+    k.y = position.y;
+    k.w = position.w;
+    k.h = position.h;
+  });
+
+  selectedKey = null;
+  updateSizePanel();
+  render();
+
+  alert("配置を読み込みました！");
+  showKeyboardScreen();
+};
+
+/* ===== 画面切り替え ===== */
+
+const keyboardScreen = document.getElementById("keyboardScreen");
+const csvScreen = document.getElementById("csvScreen");
+
+const openImportBtn = document.getElementById("openImportBtn");
+const cancelImportBtn = document.getElementById("cancelImportBtn");
+
+function showCsvScreen() {
+  keyboardScreen.style.display = "none";
+  csvScreen.style.display = "block";
+  sizePanel.style.display = "none";
+}
+
+function showKeyboardScreen() {
+  csvScreen.style.display = "none";
+  keyboardScreen.style.display = "block";
+  sizePanel.style.display = editMode ? "block" : "none";
+  render();
+}
+
+openImportBtn.onclick = showCsvScreen;
+
+cancelImportBtn.onclick = showKeyboardScreen;
+
 /* 初期描画 */
 applyModeUI();
 render();
-
