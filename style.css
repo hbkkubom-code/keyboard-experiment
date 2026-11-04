@@ -52,17 +52,19 @@ textarea {
 #keyboard {
   position: relative;
   width: 100%;
-  max-width: 600px;
+  max-width: 700px;
   height: 300px;
   margin: auto;
   margin-top: 10px;
   background: #ccc;
   border: 1px solid #ccc;
+  box-sizing: border-box;
   touch-action: none;
 }
 
 .key {
   position: absolute;
+  box-sizing: border-box;
   background: white;
   border-radius: 10px;
   border: 1px solid #888;
@@ -72,7 +74,7 @@ textarea {
   font-size: 18px;
   user-select: none;
   touch-action: none;
-  transition: background-color 0.1s ease, transform 0.1s ease;
+  transition: background-color .1s ease, transform .1s ease;
 }
 
 .key.selected {
@@ -113,4 +115,29 @@ textarea {
 #csvScreen button {
   width: 100%;
   margin-bottom: 8px;
+}
+
+/* スマホ画面から横にはみ出さないようにする */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+#keyboardScreen {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+#keyboard {
+  width: 100%;
+  max-width: 660px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
 }
