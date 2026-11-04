@@ -1,49 +1,44 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>キーボード</title>
-  
-  <link rel="stylesheet" href="style.css">
-
-
-</head>
-<body>
-
 <textarea id="textArea" placeholder="ここに入力されます"></textarea>
-
-<div id="measureButtons">
-  <button id="startMeasureBtn">測定開始</button>
-  <button id="stopMeasureBtn">測定終了</button>
-  <button id="exportLayoutBtn">座標出力</button>
-</div>
 
 <div id="topBar">
   <button id="modeBtn">編集モード</button>
+  <button id="openImportBtn">配置を読み込む</button>
+  <button id="exportLayoutBtn">座標出力</button>
 </div>
 
-<div id="keyboard"></div>
+<!-- キーボード画面 -->
+<div id="keyboardScreen">
+  <div id="keyboard"></div>
+</div>
 
-<div id="sizePanel" style="display:none; padding:10px; border-top:1px solid #ccc;">
+<!-- CSV読み込み画面 -->
+<div id="csvScreen" style="display:none;">
+
+  <h3>配置データ読み込み</h3>
+
+  <textarea id="layoutInput"
+    placeholder="ここに座標データを貼り付けてください"></textarea>
+
+  <button id="importLayoutBtn">配置を読み込む</button>
+
+  <button id="cancelImportBtn">戻る</button>
+
+</div>
+
+<div id="sizePanel" style="display:none;">
   <div>選択中キー: <span id="keyLabel">-</span></div>
 
   幅:
-  <input type="number" id="keyWidth" style="width:80px">
+  <input type="number" id="keyWidth">
 
   高さ:
-  <input type="number" id="keyHeight" style="width:80px">
+  <input type="number" id="keyHeight">
 
   X:
-  <input type="number" id="keyX" style="width:70px">
+  <input type="number" id="keyX">
 
   Y:
-  <input type="number" id="keyY" style="width:70px">
+  <input type="number" id="keyY">
 </div>
 
 <script src="script.js"></script>
-
-</body>
-</html>
-
-
