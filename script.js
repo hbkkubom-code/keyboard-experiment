@@ -49,7 +49,7 @@ const keys = [
   { label: "enter", x: 580, y: 170, w: 70, h: 70}
 ];
 
-const BASE_WIDTH = 600;
+const BASE_WIDTH = 660;
 
 const keyboard = document.getElementById("keyboard");
 const textArea = document.getElementById("textArea");
@@ -326,8 +326,9 @@ const scale = keyboard.clientWidth / BASE_WIDTH;
       if (e.touches.length === 1) {
         const nx = e.touches[0].clientX;
         const ny = e.touches[0].clientY;
-        k.x += nx - sx;
-        k.y += ny - sy;
+        const coordinateScale = keyboard.clientWidth / BASE_WIDTH;
+        k.x += (nx - sx) / coordinateScale;
+        k.y += (ny - sy) / coordinateScale;
         sx = nx;
         sy = ny;
         updateSizePanel();
@@ -367,9 +368,9 @@ function updateKeyboardHeight(){
     if(bottom > maxBottom) maxBottom = bottom;
   });
 
-  const padding = 20; // ← ここが余白
+  const padding = 10;
 
-  const totalHeight = (maxBottom - minTop) + padding * 2;
+  const totalHeight = maxBottom + padding;
 
   keyboard.style.height = totalHeight + "px";
 }
@@ -539,3 +540,8 @@ cancelImportBtn.onclick = showKeyboardScreen;
 /* 初期描画 */
 applyModeUI();
 render();
+
+// 画面サイズが変わったらキーを再配置
+window.addEventListener("resize", () => {
+  render();
+});
