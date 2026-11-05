@@ -21,32 +21,32 @@ let selectedKey = null;
 
 /* ===== キー配置（backspace追加） ===== */
 const keys = [
-  { label:"a", x:10, y:10, w:70, h:70 },
-  { label:"i", x:90, y:10, w:70, h:70 },
-  { label:"u", x:10, y:90, w:70, h:70 },
-  { label:"e", x:90, y:90, w:70, h:70 },
-  { label:"o", x:10, y:170, w:70, h:70 },
+ { label:"a", x:90, y:90, w:70, h:70 },
+  { label:"i", x:10, y:90, w:70, h:70 },
+  { label:"u", x:90, y:170, w:70, h:70 },
+  { label:"e", x:10, y:10, w:70, h:70 },
+  { label:"o", x:90, y:10, w:70, h:70 },
 
-  { label:"k", x:500, y:10, w:70, h:70 },
-  { label:"s", x:340, y:10, w:70, h:70 },
-  { label:"t", x:420, y:10, w:70, h:70 },
-  { label:"n", x:340, y:170, w:70, h:70 },
-  { label:"h", x:420, y:90, w:70, h:70 },
-  { label:"m", x:180, y:170, w:70, h:70 },
-  { label:"y", x:340, y:90, w:70, h:70 },
-  { label:"r", x:500, y:90, w:70, h:70 },
-  { label:"w", x:260, y:90, w:70, h:70 },
-  { label:"g", x:260, y:10, w:70, h:70 },
+  { label:"k", x:340, y:10, w:70, h:70 },
+  { label:"s", x:340, y:170, w:70, h:70 },
+  { label:"t", x:260, y:90, w:70, h:70 },
+  { label:"n", x:340, y:90, w:70, h:70 },
+  { label:"h", x:260, y:10, w:70, h:70 },
+  { label:"m", x:260, y:170, w:70, h:70 },
+  { label:"y", x:420, y:170, w:70, h:70 },
+  { label:"r", x:420, y:90, w:70, h:70 },
+  { label:"w", x:180, y:170, w:70, h:70 },
+  { label:"g", x:180, y:10, w:70, h:70 },
   { label:"z", x:180, y:90, w:70, h:70 },
-  { label:"d", x:420, y:170, w:70, h:70 },
-  { label:"b", x:260, y:170, w:70, h:70 },
-  { label:"p", x:180, y:10, w:70, h:70 },
-  { label:"x", x:90, y:170, w:70, h:70 },
+  { label:"d", x:420, y:10, w:70, h:70 },
+  { label:"b", x:500, y:90, w:70, h:70 },
+  { label:"p", x:500, y:170, w:70, h:70 },
+  { label:"x", x:10, y:170, w:70, h:70 },
 
-  { label:"-、。!?", x:500, y:170, w:70, h:70 },
-  { label:"back", x:580, y:10, w:70, h:70 },
-  { label:"space", x:580, y:90, w:70, h:70 },
-  { label: "enter", x: 580, y: 170, w: 70, h: 70}
+  { label:"-、。!?", x:580, y:170, w:70, h:70 },
+  { label:"back", x:500, y:10, w:70, h:70 },
+  { label:"space", x:580, y:10, w:70, h:70 },
+  { label: "enter", x: 580, y: 90, w: 70, h: 70}
 ];
 
 const BASE_WIDTH = 660;
