@@ -21,7 +21,7 @@ let selectedKey = null;
 
 /* ===== キー配置（backspace追加） ===== */
 const keys = [
- { label:"a", x:90, y:90, w:70, h:70 },
+  { label:"a", x:90, y:90, w:70, h:70 },
   { label:"i", x:10, y:90, w:70, h:70 },
   { label:"u", x:90, y:170, w:70, h:70 },
   { label:"e", x:10, y:10, w:70, h:70 },
@@ -48,6 +48,122 @@ const keys = [
   { label:"space", x:580, y:10, w:70, h:70 },
   { label: "enter", x: 580, y: 90, w: 70, h: 70}
 ];
+
+const layoutA = [
+  {label:"a", x:10, y:90, w:55, h:70},
+  {label:"i", x:406, y:10, w:55, h:70},
+  {label:"u", x:345, y:10, w:55, h:70},
+  {label:"e", x:101, y:10, w:55, h:70},
+  {label:"o", x:467, y:10, w:55, h:70},
+  {label:"k", x:437, y:90, w:55, h:70},
+  {label:"s", x:71, y:90, w:55, h:70},
+  {label:"t", x:223, y:10, w:55, h:70},
+  {label:"n", x:406, y:170, w:55, h:70},
+  {label:"h", x:315, y:90, w:55, h:70},
+  {label:"m", x:467, y:170, w:55, h:70},
+  {label:"y", x:284, y:10, w:55, h:70},
+  {label:"r", x:162, y:10, w:55, h:70},
+  {label:"w", x:40, y:10, w:55, h:70},
+  {label:"g", x:254, y:90, w:55, h:70},
+  {label:"z", x:40, y:170, w:55, h:70},
+  {label:"d", x:132, y:90, w:55, h:70},
+  {label:"b", x:345, y:170, w:55, h:70},
+  {label:"p", x:528, y:10, w:55, h:70},
+  {label:"x", x:101, y:170, w:55, h:70},
+  {label:"-、。!?", x:528, y:170, w:55, h:70},
+  {label:"back", x:589, y:10, w:55, h:70},
+  {label:"space", x:589, y:170, w:55, h:70},
+  {label:"enter", x:589, y:90, w:55, h:70}
+];
+
+const layoutB = [
+  {label:"a", x:10, y:90, w:70, h:70},
+  {label:"i", x:90, y:90, w:70, h:70},
+  {label:"u", x:90, y:10, w:70, h:70},
+  {label:"e", x:10, y:10, w:70, h:70},
+  {label:"o", x:90, y:170, w:70, h:70},
+  {label:"k", x:500, y:90, w:70, h:70},
+  {label:"s", x:180, y:90, w:70, h:70},
+  {label:"t", x:340, y:10, w:70, h:70},
+  {label:"n", x:340, y:170, w:70, h:70},
+  {label:"h", x:420, y:90, w:70, h:70},
+  {label:"m", x:420, y:170, w:70, h:70},
+  {label:"y", x:420, y:10, w:70, h:70},
+  {label:"r", x:260, y:10, w:70, h:70},
+  {label:"w", x:180, y:10, w:70, h:70},
+  {label:"g", x:340, y:90, w:70, h:70},
+  {label:"z", x:180, y:170, w:70, h:70},
+  {label:"d", x:260, y:90, w:70, h:70},
+  {label:"b", x:260, y:170, w:70, h:70},
+  {label:"p", x:500, y:170, w:70, h:70},
+  {label:"x", x:10, y:170, w:70, h:70},
+  {label:"-、。!?", x:580, y:170, w:70, h:70},
+  {label:"back", x:500, y:10, w:70, h:70},
+  {label:"space", x:580, y:10, w:70, h:70},
+  {label:"enter", x:580, y:90, w:70, h:70}
+];
+
+const layoutC = [
+  {label:"a", x:90, y:90, w:70, h:70},
+  {label:"i", x:10, y:90, w:70, h:70},
+  {label:"u", x:10, y:10, w:70, h:70},
+  {label:"e", x:90, y:170, w:70, h:70},
+  {label:"o", x:90, y:10, w:70, h:70},
+  {label:"k", x:340, y:90, w:70, h:70},
+  {label:"s", x:420, y:90, w:70, h:70},
+  {label:"t", x:260, y:90, w:70, h:70},
+  {label:"n", x:180, y:90, w:70, h:70},
+  {label:"h", x:180, y:10, w:70, h:70},
+  {label:"m", x:260, y:10, w:70, h:70},
+  {label:"y", x:420, y:10, w:70, h:70},
+  {label:"r", x:500, y:90, w:70, h:70},
+  {label:"w", x:260, y:170, w:70, h:70},
+  {label:"g", x:180, y:170, w:70, h:70},
+  {label:"z", x:340, y:170, w:70, h:70},
+  {label:"d", x:340, y:10, w:70, h:70},
+  {label:"b", x:420, y:170, w:70, h:70},
+  {label:"p", x:500, y:170, w:70, h:70},
+  {label:"x", x:10, y:170, w:70, h:70},
+  {label:"-、。!?", x:580, y:170, w:70, h:70},
+  {label:"back", x:500, y:10, w:70, h:70},
+  {label:"space", x:580, y:10, w:70, h:70},
+  {label:"enter", x:580, y:90, w:70, h:70}
+];
+
+/* ===== 保存済み配置 ===== */
+const savedLayouts = {
+  "円形": keys.map(k => ({ ...k })),
+  "qwerty": layoutA,
+  "左右分け": layoutB,
+  "横並び": layoutC
+};
+
+/* ===== プルダウンで配置を切り替える ===== */
+
+const layoutSelect = document.getElementById("layoutSelect");
+
+layoutSelect.addEventListener("change", () => {
+  const selectedLayout = savedLayouts[layoutSelect.value];
+
+  if (!selectedLayout) {
+    alert("配置データが見つかりません");
+    return;
+  }
+
+  keys.forEach(k => {
+    const saved = selectedLayout.find(s => s.label === k.label);
+
+    if (!saved) return;
+
+    k.x = saved.x;
+    k.y = saved.y;
+    k.w = saved.w;
+    k.h = saved.h;
+  });
+
+  selectedKey = null;
+  render();
+});
 
 const BASE_WIDTH = 660;
 
@@ -85,7 +201,7 @@ const kanaMap = {
   za:"ざ", zi:"じ", zu:"ず", ze:"ぜ", zo:"ぞ",
   da:"だ", di:"ぢ", du:"づ", de:"で", do:"ど",
   ba:"ば", bi:"び", bu:"ぶ", be:"べ", bo:"ぼ",
-  pa:"は", pi:"ひ", pu:"ふ", pe:"へ", po:"ほ",
+  pa:"ぱ", pi:"ぴ", pu:"ぷ", pe:"ぺ", po:"ぽ",
   kya:"きゃ", kyi:"きぃ", kyu:"きゅ", kye:"きぇ", kyo:"きょ",
   sya:"しゃ", syi:"しぃ", syu:"しゅ", sye:"しぇ", syo:"しょ",
   tya:"ちゃ", tyi:"ちぃ", tyu:"ちゅ", tye:"ちぇ", tyo:"ちょ",
